@@ -1,7 +1,5 @@
-from . import server
-import asyncio
-def main():
-    """Main entry point for the package."""
-    asyncio.run(server.main())
+"""MCP server for the New Zealand Business Number (NZBN) API."""
 
-__all = ['main', 'server']
+from .server import main, mcp
+
+__all__ = ["main", "mcp"]

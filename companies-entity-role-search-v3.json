@@ -1,0 +1,468 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "Companies Entity Role Search",
+        "description": "The Companies Entity Role Search API provides the facility for searching the New Zealand Companies Register for persons or entities that have a director or shareholder role in one or more companies. See [here](./api/companies-entity-role-search) for additional information on how to use the API. A separate [API](./api-details#api=companies-disqualified-director-search) is available for searching for disqualified directors.",
+        "version": "v3"
+    },
+    "servers": [
+        {
+            "url": "https://api.business.govt.nz/gateway/companies-office/companies-register/entity-roles/v3"
+        },
+        {
+            "url": "https://api.int.mbie.govt.nz/gateway/companies-office/companies-register/entity-roles/v3"
+        },
+        {
+            "url": "https://apim.api.int.mbie.govt.nz/gateway/companies-office/companies-register/entity-roles/v3"
+        }
+    ],
+    "paths": {
+        "/search": {
+            "get": {
+                "summary": "Search for details of the associations of Directors and Shareholders (roles) in company entities. Uses query parameters.",
+                "description": "This service searches the Companies Register for Director and Shareholder roles in company entities. The search criteria include the type of role (Director, Shareholder or both) and the name of the person or organisation in that role.",
+                "operationId": "get-search-name-name",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Name of the individual or organisation, in some role associated with a company, to search for. Note that the search matches names that include the specified name anywhere within it. Note also that the name to search for must be at least 2 characters long.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "The page in the collection to return, starting at 0. Default is page 0.",
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "page-size",
+                        "in": "query",
+                        "description": "The number of items to include in each page returned. Default is 10.",
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "registered-only",
+                        "in": "query",
+                        "description": "Flag to indicate whether the search results should only return directors and shareholders that have an active role in at least one registered company. Details of all companies associated with that director or shareholder will be returned regardless of each company status. ",
+                        "schema": {
+                            "type": "boolean",
+                            "default": false
+                        }
+                    },
+                    {
+                        "name": "role-type",
+                        "in": "query",
+                        "description": "The type of role to search for. One of SHR, DIR or ALL may be specified corresponding to Shareholder, Director or both Shareholder and Director, respectively.",
+                        "schema": {
+                            "enum": [
+                                "SHR",
+                                "DIR",
+                                "ALL"
+                            ],
+                            "type": "string",
+                            "default": "DIR"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The list of Roles in Entities matching the search criteria.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SearchResults"
+                                },
+                                "example": {
+                                    "totalResults": 0,
+                                    "roles": [
+                                        {
+                                            "middleName": "Martin",
+                                            "lastName": "SMITH",
+                                            "appointmentDate": "2013-04-03T12:00:00.0000000+00:00",
+                                            "associatedCompanyNumber": 1884264,
+                                            "associatedCompanyNzbn": 123456789012,
+                                            "associatedCompanyStatusCode": 80,
+                                            "status": "inactive",
+                                            "resignationDate": "2015-04-03T12:00:00.0000000+00:00",
+                                            "name": "ACME LIMITED",
+                                            "nzbn": 123456789012,
+                                            "entityNumber": 12345678,
+                                            "historicNames": [
+                                                "string"
+                                            ],
+                                            "shareholdings": [
+                                                {
+                                                    "associatedCompanyNumber": 1884264,
+                                                    "associatedCompanyNzbn": 123456789012,
+                                                    "jointlyHeld": false,
+                                                    "sharePercentage": 100,
+                                                    "associatedCompanyName": "TIMARU BUS SERVICES LIMITED",
+                                                    "associatedCompanyStatusCode": 80,
+                                                    "numberOfShares": 150
+                                                }
+                                            ],
+                                            "roleType": "Director",
+                                            "physicalAddress": {
+                                                "addressLines": [
+                                                    "string"
+                                                ],
+                                                "postCode": 1025,
+                                                "countryCode": "NZ",
+                                                "pafId": 580631
+                                            },
+                                            "firstName": "John",
+                                            "associatedCompanyName": "TIMARU BUS SERVICES LIMITED"
+                                        }
+                                    ],
+                                    "pageSize": 0,
+                                    "currentPage": 0
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SearchResults"
+                                },
+                                "example": "<SearchResults> <totalResults>0</totalResults> <roles> <middleName>Martin</middleName> <lastName>SMITH</lastName> <appointmentDate>2013-04-03+13:00</appointmentDate> <associatedCompanyNumber>1884264</associatedCompanyNumber> <associatedCompanyNzbn>123456789012</associatedCompanyNzbn> <associatedCompanyStatusCode>80</associatedCompanyStatusCode> <status>inactive</status> <resignationDate>2015-04-03+13:00</resignationDate> <name>ACME LIMITED</name> <nzbn>123456789012</nzbn> <entityNumber>12345678</entityNumber> <historicNames>string</historicNames> <shareholdings> <associatedCompanyNumber>1884264</associatedCompanyNumber> <associatedCompanyNzbn>123456789012</associatedCompanyNzbn> <jointlyHeld>False</jointlyHeld> <sharePercentage>100</sharePercentage> <associatedCompanyName>TIMARU BUS SERVICES LIMITED</associatedCompanyName> <associatedCompanyStatusCode>80</associatedCompanyStatusCode> <numberOfShares>150</numberOfShares> </shareholdings> <roleType>Director</roleType> <physicalAddress> <addressLines>string</addressLines> <postCode>1025</postCode> <countryCode>NZ</countryCode> <pafId>580631</pafId> </physicalAddress> <firstName>John</firstName> <associatedCompanyName>TIMARU BUS SERVICES LIMITED</associatedCompanyName> </roles> <pageSize>0</pageSize> <currentPage>0</currentPage> </SearchResults>"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request parameters.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDescription"
+                                },
+                                "example": {
+                                    "statusCode": 400,
+                                    "message": "An unexpected error occured servicing the request.",
+                                    "error": true
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDescription"
+                                },
+                                "example": "<ErrorDescription> <statusCode>400</statusCode> <message>An unexpected error occured servicing the request.</message> <error>True</error> </ErrorDescription>"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "The requester is not authenticated.",
+                        "content": {
+                            "application/json": {},
+                            "application/xml": {}
+                        }
+                    },
+                    "403": {
+                        "description": "The requester is not authorised for this API.",
+                        "content": {
+                            "application/json": {},
+                            "application/xml": {}
+                        }
+                    },
+                    "500": {
+                        "description": "An unexpected internal server error occurred.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDescription"
+                                },
+                                "example": {
+                                    "statusCode": 400,
+                                    "message": "An unexpected error occured servicing the request.",
+                                    "error": true
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorDescription"
+                                },
+                                "example": "<ErrorDescription> <statusCode>400</statusCode> <message>An unexpected error occured servicing the request.</message> <error>True</error> </ErrorDescription>"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Shareholding": {
+                "required": [
+                    "associatedCompanyNumber",
+                    "associatedCompanyName",
+                    "associatedCompanyNzbn",
+                    "associatedCompanyStatusCode",
+                    "numberOfShares",
+                    "jointlyHeld"
+                ],
+                "properties": {
+                    "associatedCompanyNumber": {
+                        "type": "string",
+                        "description": "The company number of the Entity to which the role applies",
+                        "example": "1884264"
+                    },
+                    "associatedCompanyNzbn": {
+                        "type": "string",
+                        "description": "The NZBN of the company entity to which the role applies",
+                        "example": "123456789012"
+                    },
+                    "jointlyHeld": {
+                        "type": "boolean",
+                        "description": "Whether the shareholding is jointly held or not",
+                        "example": false
+                    },
+                    "sharePercentage": {
+                        "maximum": 100,
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "The percentage of the shareholding.  This is typically only present if the shareholdoing is jointly held",
+                        "example": 100
+                    },
+                    "associatedCompanyName": {
+                        "type": "string",
+                        "description": "The company name of the Entity to which the role applies",
+                        "example": "TIMARU BUS SERVICES LIMITED"
+                    },
+                    "associatedCompanyStatusCode": {
+                        "type": "string",
+                        "description": "A code that identifies the current company status",
+                        "example": "80"
+                    },
+                    "numberOfShares": {
+                        "type": "integer",
+                        "description": "The number of shares in the shareholding",
+                        "example": 150
+                    }
+                },
+                "description": "Details of a shareholding."
+            },
+            "Address": {
+                "required": [
+                    "addressLines"
+                ],
+                "properties": {
+                    "addressLines": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "Array of free format address lines.  There are typically 3 addressLines but this is not enforced."
+                    },
+                    "postCode": {
+                        "type": "string",
+                        "description": "Post Code",
+                        "example": "1025"
+                    },
+                    "countryCode": {
+                        "type": "string",
+                        "description": "(2 letter) ISO Country Code",
+                        "example": "NZ"
+                    },
+                    "pafId": {
+                        "type": "string",
+                        "description": "The PAF Delivery Point ID (DPID) for the address",
+                        "example": "580631"
+                    }
+                },
+                "description": "Address line style type for a postal or physical address."
+            },
+            "ErrorDescription": {
+                "required": [
+                    "error",
+                    "statusCode",
+                    "message"
+                ],
+                "properties": {
+                    "statusCode": {
+                        "type": "integer",
+                        "description": "Status code for the message.",
+                        "example": 400
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "Text explaining the message.",
+                        "example": "An unexpected error occured servicing the request."
+                    },
+                    "error": {
+                        "type": "boolean",
+                        "description": "Boolean to indicate whether the message is an error or not.",
+                        "example": true
+                    }
+                },
+                "description": "Representation of generic error response"
+            },
+            "SearchResults": {
+                "required": [
+                    "currentPage",
+                    "pageSize",
+                    "totalResults",
+                    "roles"
+                ],
+                "properties": {
+                    "totalResults": {
+                        "minimum": 0,
+                        "type": "integer",
+                        "description": "The total number of results/items in this collection"
+                    },
+                    "roles": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/RoleInEntity"
+                        },
+                        "description": "The array of search results"
+                    },
+                    "pageSize": {
+                        "minimum": 0,
+                        "type": "integer",
+                        "description": "The number of results/items returned per page of results"
+                    },
+                    "currentPage": {
+                        "minimum": 0,
+                        "type": "integer",
+                        "description": "The page in the collection. Note that it starts at 0"
+                    }
+                },
+                "description": "Paged collection of (one or more) roles in (one or more) Entities."
+            },
+            "RoleInEntity": {
+                "required": [
+                    "roleType",
+                    "physicalAddress",
+                    "status"
+                ],
+                "properties": {
+                    "middleName": {
+                        "type": "string",
+                        "description": "(Director, DirectorShareholder, IndividualShareholder) Middle name(s) of the person",
+                        "example": "Martin"
+                    },
+                    "lastName": {
+                        "type": "string",
+                        "description": "(Director, DirectorShareholder, IndividualShareholder) The last name of the person in the role",
+                        "example": "SMITH"
+                    },
+                    "appointmentDate": {
+                        "type": "string",
+                        "description": "(Director) The date of appointment of the Role in an Entity",
+                        "format": "date",
+                        "example": "2013-04-03"
+                    },
+                    "associatedCompanyNumber": {
+                        "type": "string",
+                        "description": "(Director) The company number of the company entity to which the role applies",
+                        "example": "1884264"
+                    },
+                    "associatedCompanyNzbn": {
+                        "type": "string",
+                        "description": "(Director) The NZBN of the company entity to which the role applies",
+                        "example": "123456789012"
+                    },
+                    "associatedCompanyStatusCode": {
+                        "type": "string",
+                        "description": "(Director) A code that identifies the current company status of the company entity to which the role applies",
+                        "example": "80"
+                    },
+                    "status": {
+                        "type": "string",
+                        "description": "The status of the role",
+                        "example": "inactive"
+                    },
+                    "resignationDate": {
+                        "type": "string",
+                        "description": "(Director, optional) date of resignation of the Role in an Entity, if applicable",
+                        "format": "date",
+                        "example": "2015-04-03"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "(OrganisationShareholder) The name of the Organisation",
+                        "example": "ACME LIMITED"
+                    },
+                    "nzbn": {
+                        "type": "string",
+                        "description": "(OrganisationShareholder) The NZBN of the Organisation, if a New Zealand company",
+                        "example": "123456789012"
+                    },
+                    "entityNumber": {
+                        "type": "string",
+                        "description": "(OrganisationShareholder) The unique identifier of the Organisation, if not a New Zealand comapany",
+                        "example": "12345678"
+                    },
+                    "historicNames": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "(OrganisationShareholder) The list of historic names of the Organisation"
+                    },
+                    "shareholdings": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Shareholding"
+                        },
+                        "description": "(OrganisationShareholder, DirectorShareholder, IndividualShareholder) The list of shareholdings for the role"
+                    },
+                    "roleType": {
+                        "enum": [
+                            "Director",
+                            "DirectorShareholder",
+                            "IndividualShareholder",
+                            "OrganisationShareholder"
+                        ],
+                        "type": "string",
+                        "description": "The type of role"
+                    },
+                    "physicalAddress": {
+                        "$ref": "#/components/schemas/Address"
+                    },
+                    "firstName": {
+                        "type": "string",
+                        "description": "(Director, DirectorShareholder, IndividualShareholder) The first name of the person in the role",
+                        "example": "John"
+                    },
+                    "associatedCompanyName": {
+                        "type": "string",
+                        "description": "(Director) The company name of the Entity to which the role applies",
+                        "example": "TIMARU BUS SERVICES LIMITED"
+                    }
+                },
+                "description": "An instance of a RoleInEntity can be one of roleType: Director, DirectorShareholder, IndividualShareholder or OrganisationShareholder.  The rules for the properties present are as follows: status, roleType and physicalAddress are always present; firstName, middleName (if applicable), lastName, associatedCompanyNumber, associatedCompanyName (and resignationDate if applicable) are present for a Director; firstName, middleName (if applicable), lastName and shareholdings are present for a DirectorShareholder and IndividualShareholder; name and shareholdings are present for an OrganisationShareholderRole.",
+                "discriminator": {
+                    "propertyName": "roleType"
+                }
+            }
+        },
+        "securitySchemes": {
+            "apiKeyHeader": {
+                "type": "apiKey",
+                "name": "Ocp-Apim-Subscription-Key",
+                "in": "header"
+            },
+            "apiKeyQuery": {
+                "type": "apiKey",
+                "name": "subscription-key",
+                "in": "query"
+            }
+        }
+    },
+    "security": [
+        {
+            "apiKeyHeader": []
+        },
+        {
+            "apiKeyQuery": []
+        }
+    ]
+}
