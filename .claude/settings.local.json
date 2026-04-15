@@ -10,7 +10,8 @@
       "Bash(MCP_TRANSPORT=streamable-http MCP_HOST=0.0.0.0 MCP_PORT=8000 .venv/Scripts/python.exe *)",
       "Bash(curl -s -X POST http://localhost:8000/mcp -H \"Content-Type: application/json\" -d '{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",\"params\":{\"protocolVersion\":\"2025-03-26\",\"capabilities\":{},\"clientInfo\":{\"name\":\"test\",\"version\":\"0.1\"}}}')",
       "Bash(curl *)",
-      "Bash(.venv/Scripts/pip install *)"
+      "Bash(.venv/Scripts/pip install *)",
+      "Bash(MCP_TRANSPORT=streamable-http .venv/Scripts/python.exe -c \"from app import app; print\\(type\\(app\\)\\)\")"
     ]
   }
 }
