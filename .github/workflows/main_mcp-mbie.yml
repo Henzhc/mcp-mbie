@@ -67,10 +67,6 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_FC6191E4EED94921B7A15883F11680D9 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_8C0868A315E147C38BFBB6BCD4F1BF68 }}
 
-      - name: Set startup command
-        run: |
-          az webapp config set --name mcp-mbie --resource-group mbie-mcp-rg-au --startup-file "gunicorn --worker-class uvicorn.workers.UvicornWorker --timeout 600 --bind 0.0.0.0:\$PORT app:app"
-
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
