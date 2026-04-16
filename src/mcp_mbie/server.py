@@ -1,7 +1,7 @@
-"""MCP server for the NZBN (New Zealand Business Number) API v5.
+"""MCP server for MBIE business register APIs.
 
 Exposes read-only tools for searching and inspecting NZ business entities
-via the government NZBN register.
+via the NZBN register and Companies Office entity roles API.
 
 Supports two transports:
 - **stdio**  (default) — local, single-user.
@@ -56,7 +56,7 @@ MCP_AUTH_TOKEN = os.getenv("MCP_AUTH_TOKEN", "").strip()
 # ---------------------------------------------------------------------------
 
 mcp = FastMCP(
-    "nzbn",
+    "mbie",
     host=MCP_HOST,
     port=MCP_PORT,
 )

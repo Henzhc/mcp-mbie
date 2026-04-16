@@ -9,4 +9,4 @@ RUN pip install --no-cache-dir .
 ENV MCP_TRANSPORT=streamable-http
 ENV MCP_HOST=0.0.0.0
 
-CMD ["python", "-c", "from mcp_nzbn import main; main()"]
+CMD ["mcp-mbie"]

@@ -3,9 +3,9 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "mcp-nzbn"
+name = "mcp-mbie"
 version = "0.1.0"
-description = "MCP server for the New Zealand Business Number (NZBN) API"
+description = "MCP server for MBIE business register APIs (NZBN and Companies Office)"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
@@ -17,7 +17,7 @@ dependencies = [
 ]
 
 [project.scripts]
-mcp-nzbn = "mcp_nzbn:main"
+mcp-mbie = "mcp_mbie:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/mcp_nzbn"]
+packages = ["src/mcp_mbie"]
