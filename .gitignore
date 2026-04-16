@@ -3,3 +3,5 @@
 __pycache__/
 *.pyc
 .claude/
+companies-entity-role-search-v3.json
+nzbn.json
