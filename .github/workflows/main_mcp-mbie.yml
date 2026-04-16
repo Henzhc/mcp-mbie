@@ -22,7 +22,7 @@ jobs:
       - name: Set up Python version
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: '3.x'
 
       # 🛠️ Local Build Section (Optional)
       # The following section in your workflow is designed to catch build issues early on the client side, before deployment. This can be helpful for debugging and validation. However, if this step significantly increases deployment time and early detection is not critical for your workflow, you may remove this section to streamline the deployment process.
@@ -63,13 +63,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_F2ED14423B33445B87D3E63B73B4A50E }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_15B87C992A444AFC842D9A41C382FAE4 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_27147CA837074EA88F58977CC07D6443 }}
-
-      - name: Set startup command
-        run: |
-          az webapp config set --name mcp-mbie --resource-group mbie-mcp-rg --startup-file "gunicorn --worker-class uvicorn.workers.UvicornWorker --timeout 600 --bind 0.0.0.0:\$PORT app:app"
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_BAA9714478C6420481F0A4CA0545F157 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_FC6191E4EED94921B7A15883F11680D9 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_8C0868A315E147C38BFBB6BCD4F1BF68 }}
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
