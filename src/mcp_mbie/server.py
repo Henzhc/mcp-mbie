@@ -333,7 +333,8 @@ def main():
     """Run the MCP server using the configured transport.
 
     When running with streamable-http and MCP_AUTH_TOKEN is set, requests
-    must include ``Authorization: Bearer <token>`` or they get a 401.
+    must authenticate via either ``Authorization: Bearer <token>`` or a
+    ``?token=<token>`` query parameter, otherwise they get a 401.
     """
     if MCP_TRANSPORT == "stdio" or not MCP_AUTH_TOKEN:
         mcp.run(transport=MCP_TRANSPORT)
@@ -349,7 +350,13 @@ def main():
     from starlette.types import ASGIApp, Receive, Scope, Send
 
     class BearerAuthMiddleware:
-        """Reject requests that don't carry a valid bearer token."""
+        """Reject requests that don't carry a valid token.
+
+        Accepts the token via ``Authorization: Bearer <token>`` header or
+        ``?token=<token>`` query param — the latter lets users paste a single
+        URL into Claude Desktop's custom-connector dialog without a separate
+        header config step.
+        """
 
         def __init__(self, app: ASGIApp) -> None:
             self.app = app
@@ -364,7 +371,7 @@ def main():
             if auth.startswith("Bearer "):
                 token = auth[7:]
             else:
-                token = ""
+                token = request.query_params.get("token", "")
 
             if not hmac.compare_digest(token, MCP_AUTH_TOKEN):
                 resp = JSONResponse(
