@@ -10,6 +10,8 @@ from starlette.types import ASGIApp, Receive, Scope, Send
 
 
 class BearerAuthMiddleware:
+    """Accepts token via ``Authorization: Bearer`` header or ``?token=`` query param."""
+
     def __init__(self, app: ASGIApp) -> None:
         self.app = app
 
@@ -20,7 +22,10 @@ class BearerAuthMiddleware:
 
         request = Request(scope)
         auth = request.headers.get("authorization", "")
-        token = auth[7:] if auth.startswith("Bearer ") else ""
+        if auth.startswith("Bearer "):
+            token = auth[7:]
+        else:
+            token = request.query_params.get("token", "")
 
         if not hmac.compare_digest(token, MCP_AUTH_TOKEN):
             resp = JSONResponse({"error": "Unauthorized"}, status_code=401)
