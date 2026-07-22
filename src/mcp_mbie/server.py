@@ -463,6 +463,16 @@ def main():
                 await self.app(scope, receive, send)
                 return
 
+            path = scope.get("path", "")
+            if path.startswith("/.well-known/") or path == "/register":
+                # OAuth discovery probes (claude.ai connectors, MCP clients)
+                # must see a clean 404, not 401 — a 401 here makes clients
+                # believe an OAuth sign-in service exists and attempt dynamic
+                # client registration, which then fails. The inner app has no
+                # such routes, so passing through yields the 404.
+                await self.app(scope, receive, send)
+                return
+
             request = Request(scope)
             auth = request.headers.get("authorization", "")
             if auth.startswith("Bearer "):

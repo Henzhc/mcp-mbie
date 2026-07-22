@@ -20,6 +20,14 @@ class BearerAuthMiddleware:
             await self.app(scope, receive, send)
             return
 
+        path = scope.get("path", "")
+        if path.startswith("/.well-known/") or path == "/register":
+            # OAuth discovery probes must 404, not 401, or connector UIs
+            # attempt dynamic client registration and fail. The inner app
+            # has no such routes, so passing through yields the 404.
+            await self.app(scope, receive, send)
+            return
+
         request = Request(scope)
         auth = request.headers.get("authorization", "")
         if auth.startswith("Bearer "):
